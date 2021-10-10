@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { v4 as uuid } from "uuid";
+import styles from "./ContactForm.module.css";
 
 export default class ContactForm extends Component {
   contName = uuid();
@@ -24,6 +25,7 @@ export default class ContactForm extends Component {
     const contact = {
       name,
       number,
+      id: uuid(),
     };
     this.setState({ contact });
     this.props.addNewContact(contact);
@@ -38,9 +40,12 @@ export default class ContactForm extends Component {
     const { handleSubmit, handleChangeAllInputs, contNumber, contName } = this;
     const { name, number, active } = this.state;
     return (
-      <form onSubmit={handleSubmit}>
-        <label htmlFor={contName}>Contacts name</label>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <label className={styles.form__label} htmlFor={contName}>
+          Contacts name:
+        </label>
         <input
+          className={styles.form__input}
           type="text"
           id={contName}
           name="name"
@@ -49,10 +54,13 @@ export default class ContactForm extends Component {
           title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
           required
           onChange={handleChangeAllInputs}
+          placeholder="Will Smith"
         />
-        <br />
-        <label htmlFor={contNumber}>Contacts number</label>
+        <label className={styles.form__label} htmlFor={contNumber}>
+          Contacts number:
+        </label>
         <input
+          className={styles.form__input}
           type="tel"
           id={contNumber}
           name="number"
@@ -61,9 +69,9 @@ export default class ContactForm extends Component {
           title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
           required
           onChange={handleChangeAllInputs}
+          placeholder="(097) 222-33-222"
         />
-        <br />
-        <button type="submit" disabled={active}>
+        <button className={styles.form__btn} type="submit" disabled={active}>
           Add contact
         </button>
       </form>

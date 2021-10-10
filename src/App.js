@@ -11,12 +11,19 @@ export default class App extends Component {
       { id: "id-3", name: "Eden Clements", number: "645-17-79" },
       { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
     ],
+    filter: "",
   };
 
   addNewContact = (obj) => {
-    this.setState((prevState) => {
+    const { contacts } = this.state;
+    const { name } = obj;
+    if (contacts.some(({ name }) => name === obj.name)) {
+      alert(`Sorry, ${name} is already in contacts list`);
+      return;
+    }
+    this.setState(({ contacts }) => {
       return {
-        contacts: [...prevState.contacts, obj],
+        contacts: [obj, ...contacts],
       };
     });
   };
@@ -27,18 +34,30 @@ export default class App extends Component {
     }));
   };
 
+  changeFilter = (e) => {
+    this.setState({ filter: e.target.value });
+  };
+
+  getFilteredContacts = () => {
+    const { contacts, filter } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
   render() {
-    const { addNewContact, deleteContact } = this;
+    const { addNewContact, deleteContact, changeFilter } = this;
+    const visibleContacts = this.getFilteredContacts();
+    const { filter } = this.state;
     return (
       <div>
         <h1>Phonebook</h1>
         <ContactForm addNewContact={addNewContact} />
         <h2>Contacts</h2>
-        <Filter />
-        <ContactList
-          contacts={this.state.contacts}
-          deleteContact={deleteContact}
-        />
+        <Filter filter={filter} onChange={changeFilter} />
+        <ContactList contacts={visibleContacts} deleteContact={deleteContact} />
       </div>
     );
   }

@@ -1,12 +1,18 @@
-import { Component } from "react";
+import styles from "./Filter.module.css";
 
-class Filter extends Component {
-  state = {
-    filter: "",
-  };
-  render() {
-    return <input type="text" name="filter" />;
-  }
+export default function Filter({ filter, onChange }) {
+  const { box, input } = styles;
+  return (
+    <div className={box}>
+      {" "}
+      Find contacts by name:
+      <input
+        className={input}
+        type="text"
+        name="filter"
+        value={filter}
+        onChange={onChange}
+      />
+    </div>
+  );
 }
-
-export default Filter;
